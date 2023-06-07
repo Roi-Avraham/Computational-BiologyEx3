@@ -1,8 +1,9 @@
 import random
 import numpy as np
+from sklearn.metrics import roc_auc_score
 
 # Constants
-POPULATION_SIZE = 200
+POPULATION_SIZE = 10
 NUM_GENERATIONS = 30
 MUTATION_RATE = 1
 CROSSOVER_RATE = 1
@@ -22,7 +23,7 @@ with open('nn0.txt', 'r') as file:
 # Split data into training and test sets
 random.shuffle(data)
 train_size = int(0.8 * len(data))
-train_data = data[:train_size//16]
+train_data = data[:train_size]
 test_data = data[train_size:]
 
 
@@ -57,23 +58,64 @@ def initialize_population(population_size, input_size, output_size):
     population = []
     layer_size = np.random.randint(2, 11)
     for _ in range(population_size):
-        structure = [input_size, layer_size, layer_size, layer_size, layer_size, output_size]  # Randomly initialize network structure
+        structure = [input_size, layer_size+3, layer_size+2, layer_size+1, layer_size, output_size]  # Randomly initialize network structure
         population.append(Network(structure))
     return population
 
 
+# def calculate_fitness(network, data):
+#     correct_predictions = 0
+#     for example in data:
+#         input_data = np.array(list(map(int, example[0])))
+#         target = int(example[1])
+#         output = network.predict(input_data)
+#         predicted_class = 1 if output > 0.5 else 0
+#
+#         if predicted_class == target:
+#             correct_predictions += 1
+#     fitness = correct_predictions / len(data)
+#     return fitness
+
+
 def calculate_fitness(network, data):
-    correct_predictions = 0
+    predicted_probs = []
+    true_labels = []
     for example in data:
         input_data = np.array(list(map(int, example[0])))
-        target = example[1]
+        target = int(example[1])
         output = network.predict(input_data)
-        predicted_class = 1 if output > 0.5 else 0
-        if predicted_class == target:
-            correct_predictions += 1
-    fitness = correct_predictions / len(data)
+        predicted_probs.append(output)
+        true_labels.append(target)
+
+    fitness = roc_auc_score(true_labels, predicted_probs)
     return fitness
 
+
+# def calculate_fitness(network, data, roc_weight=0.7, fp_penalty=0.1):
+#     predicted_probs = []
+#     true_labels = []
+#     correct_predictions = 0
+#     false_positives = 0
+#
+#     for example in data:
+#         input_data = np.array(list(map(int, example[0])))
+#         target = int(example[1])
+#         output = network.predict(input_data)
+#         predicted_probs.append(output)
+#         true_labels.append(target)
+#
+#         predicted_class = 1 if output > 0.5 else 0
+#         if predicted_class == target:
+#             correct_predictions += 1
+#         elif predicted_class == 1 and target == 0:
+#             false_positives += 1
+#
+#     roc_auc = roc_auc_score(true_labels, predicted_probs)
+#     accuracy = correct_predictions / len(data)
+#
+#     fitness = roc_weight * roc_auc + (1 - roc_weight) * accuracy - fp_penalty * false_positives
+#     fitness = max(fitness, 0)  # Ensure fitness is non-negative
+#     return fitness
 
 def selection(population, fitness):
     parent_indices = np.random.choice(range(len(population)), size=2, replace=True, p=fitness / np.sum(fitness))
@@ -121,8 +163,8 @@ def mutation(network):
         mutated_weights.append(mutated_matrix)
 
     mutated_network = Network(network.structure, mutated_weights)
-    if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
-        return network
+    # if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
+    #     return network
     return mutated_network
 
 
