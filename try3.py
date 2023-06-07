@@ -121,6 +121,8 @@ def mutation(network):
         mutated_weights.append(mutated_matrix)
 
     mutated_network = Network(network.structure, mutated_weights)
+    # if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
+    #     return network
     return mutated_network
 
 
