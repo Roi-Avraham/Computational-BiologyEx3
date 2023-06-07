@@ -47,7 +47,7 @@ class Network:
     def predict(self, input_data):
         hidden = input_data
         for layer_weights in self.weights[:-1]:
-            hidden = sigmoid(np.dot(layer_weights,hidden))
+            hidden = sigmoid(np.dot(layer_weights, hidden))
         output = sigmoid(np.dot(self.weights[-1], hidden))
         return output
 
@@ -82,7 +82,8 @@ def selection(population, fitness):
 
 
 def crossover(parent1, parent2):
-    offspring_weights = []
+    offspring_weights_one = []
+    offspring_weights_two = []
     for i in range(len(parent1.weights)):
         # Get the shape of the matrices
         rows, cols = parent1.weights[i].shape
@@ -91,12 +92,19 @@ def crossover(parent1, parent2):
         crossover_point = np.random.randint(1, cols)
 
         # Perform one-point crossover
-        offspring = np.concatenate((parent1.weights[i][:, :crossover_point], parent2.weights[i][:, crossover_point:]),
+        offspring_one = np.concatenate((parent1.weights[i][:, :crossover_point], parent2.weights[i][:, crossover_point:]),
                                    axis=1)
-        offspring_weights.append(offspring)
+        offspring_weights_one.append(offspring_one)
 
-    child = Network(parent1.structure, offspring_weights)
-    return child
+        offspring_two = np.concatenate(
+            (parent2.weights[i][:, :crossover_point], parent1.weights[i][:, crossover_point:]),
+            axis=1)
+        offspring_weights_two.append(offspring_two)
+
+    child_one = Network(parent1.structure, offspring_weights_one)
+    child_two = Network(parent1.structure, offspring_weights_two)
+
+    return child_one, child_two
 
 
 def mutation(network):
@@ -133,11 +141,13 @@ def evolve(population, train_data):
     while len(new_population) < len(population):
         parent1, parent2 = selection(population, fitness)
         # if np.random.uniform() < CROSSOVER_RATE:
-        offspring = crossover(parent1, parent2)
+        offspring_one, offspring_two = crossover(parent1, parent2)
         # else:
         #     offspring = parent1
-        offspring = mutation(offspring)
-        new_population.append(offspring)
+        offspring_one = mutation(offspring_one)
+        offspring_two = mutation(offspring_two)
+        new_population.append(offspring_one)
+        new_population.append(offspring_two)
 
     return new_population
 
