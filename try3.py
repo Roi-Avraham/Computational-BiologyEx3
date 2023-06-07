@@ -2,9 +2,9 @@ import random
 import numpy as np
 
 # Constants
-POPULATION_SIZE = 30
-NUM_GENERATIONS = 10
-MUTATION_RATE = 0.2
+POPULATION_SIZE = 200
+NUM_GENERATIONS = 30
+MUTATION_RATE = 1
 CROSSOVER_RATE = 1
 INPUT_SIZE = 16
 OUTPUT_SIZE = 1
@@ -22,7 +22,7 @@ with open('nn0.txt', 'r') as file:
 # Split data into training and test sets
 random.shuffle(data)
 train_size = int(0.8 * len(data))
-train_data = data[:train_size]
+train_data = data[:train_size//16]
 test_data = data[train_size:]
 
 
@@ -121,8 +121,8 @@ def mutation(network):
         mutated_weights.append(mutated_matrix)
 
     mutated_network = Network(network.structure, mutated_weights)
-    # if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
-    #     return network
+    if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
+        return network
     return mutated_network
 
 
