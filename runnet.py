@@ -1,5 +1,10 @@
 import numpy as np
 
+
+
+def relu(x):
+    return np.maximum(0, x)
+
 # Define the Neural Network class
 class NeuralNetwork:
     def __init__(self, structure):
@@ -7,21 +12,20 @@ class NeuralNetwork:
         self.num_layers = len(structure)
         self.weights = []
 
-    def load_weights(self, weights_file):
-        with open(weights_file, 'r') as file:
-            for line in file:
-                layer_weights = np.array([float(val) for val in line.strip().split()])
-                self.weights.append(layer_weights)
-
     def predict(self, input_data):
         hidden = input_data
-        for layer_weights in self.weights:
-            hidden = np.dot(hidden, layer_weights)
-        output = sigmoid(hidden)
+        for layer_weights in self.weights[:-1]:
+            hidden = relu(np.dot(layer_weights, hidden))
+        output = relu(np.dot(self.weights[-1],hidden))
         return output
+
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+
+
+
+
 
 # Load the network structure and weights from file
 def load_network(network_file):
@@ -33,9 +37,9 @@ def load_network(network_file):
         current_line = 1
 
         for i in range(num_layers):
-            rows = structure[i]
+            rows = structure[i+1]
             print(rows)
-            cols = structure[i+1]
+            cols = structure[i]
             print(cols)
             weight_matrix = np.array([float(val) for val in lines[current_line].strip().split()])
             weight_matrix = weight_matrix.reshape((rows, cols))
@@ -44,22 +48,21 @@ def load_network(network_file):
 
     return structure, weights
 
+
 # Load the data from file
 def load_data(data_file):
     with open(data_file, 'r') as file:
         data = [line.strip() for line in file]
     return data
 
+
 # Save the classifications to file
 def save_classifications(classifications, output_file, data):
-    # with open(output_file, 'w') as file:
-    #     for classification in classifications:
-    #         file.write(str(classification) + '\n')
-
     # Write the data and classifications to the output file
     with open(output_file, 'w') as file:
         for i in range(len(data)):
-            file.write(data[i] + ' ' + str(classifications[i]) + '\n')
+            file.write(data[i] + '   ' + str(classifications[i]) + '\n')
+
 
 # Main program
 def run_network(network_file, data_file, output_file):
