@@ -1,9 +1,10 @@
 import numpy as np
 
-
-
 def relu(x):
     return np.maximum(0, x)
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 
 # Define the Neural Network class
 class NeuralNetwork:
@@ -15,17 +16,9 @@ class NeuralNetwork:
     def predict(self, input_data):
         hidden = input_data
         for layer_weights in self.weights[:-1]:
-            hidden = relu(np.dot(layer_weights, hidden))
-        output = relu(np.dot(self.weights[-1],hidden))
+            hidden = sigmoid(np.dot(layer_weights, hidden))
+        output = sigmoid(np.dot(self.weights[-1],hidden))
         return output
-
-
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-
-
-
 
 # Load the network structure and weights from file
 def load_network(network_file):
@@ -92,7 +85,7 @@ def run_network(network_file, data_file, output_file):
 
 
 # Example usage
-network_file = 'wnet0.txt'  # Network structure and weights file
+network_file = 'wnet1.txt'  # Network structure and weights file
 data_file = 'testnet1.txt'  # Data file
 output_file = 'classifications1.txt'  # Output file
 
