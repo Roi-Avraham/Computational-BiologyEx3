@@ -3,19 +3,19 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 # Constants
-POPULATION_SIZE = 100
+POPULATION_SIZE = 30
 NUM_GENERATIONS = 100
-MUTATION_RATE = 0.7
+MUTATION_RATE = 0.75
 CROSSOVER_RATE = 1
 INPUT_SIZE = 16
 OUTPUT_SIZE = 1
-ELITE_SIZE = 10
+ELITE_SIZE = 5
 
 
 # Load data
 # Parse the data from nn0.txt
 data = []
-with open('nn0.txt', 'r') as file:
+with open('nn1.txt', 'r') as file:
     for line in file:
         binary_string, label = line.strip().split()
         data.append((binary_string, int(label)))
@@ -35,6 +35,7 @@ def sigmoid(x):
 def relu(x):
     return np.maximum(0, x)
 
+
 def xavier_init(shape):
     """
     Xavier initialization for weight matrices.
@@ -44,13 +45,11 @@ def xavier_init(shape):
     return np.random.uniform(-limit, limit, shape)
 
 
-
 # Neural network class
 class Network:
     def __init__(self, structure, weights=None):
         self.structure = structure
         if weights is None:
-            # self.weights = [np.random.randn(structure[i + 1], structure[i]) for i in range(len(structure) - 1)]
             self.weights = [xavier_init((structure[i + 1], structure[i])) for i in range(len(structure) - 1)]
         else:
             self.weights = weights
@@ -58,8 +57,8 @@ class Network:
     def predict(self, input_data):
         hidden = input_data
         for layer_weights in self.weights[:-1]:
-            hidden = relu(np.dot(layer_weights, hidden))
-        output = relu(np.dot(self.weights[-1], hidden))
+            hidden = sigmoid(np.dot(layer_weights, hidden))
+        output = sigmoid(np.dot(self.weights[-1], hidden))
         return output
 
 
@@ -67,7 +66,7 @@ class Network:
 def initialize_population(population_size, input_size, output_size):
     population = []
     for _ in range(population_size):
-        structure = [input_size, 10, 8, 6, output_size]  # Randomly initialize network structure
+        structure = [input_size, 2, output_size]  # Randomly initialize network structure
         population.append(Network(structure))
     return population
 
@@ -82,8 +81,8 @@ def calculate_fitness(network, data):
 
         if predicted_class == target:
             correct_predictions += 1
-    print(correct_predictions)
     fitness = correct_predictions / len(data)
+    print(fitness)
     return fitness
 
 
@@ -136,7 +135,6 @@ def calculate_fitness(network, data):
 #     true_labels = []
 #     correct_predictions = 0
 #     false_positives = 0
-#     print("i")
 #
 #     for example in data:
 #         input_data = np.array(list(map(int, example[0])))
@@ -153,6 +151,7 @@ def calculate_fitness(network, data):
 #
 #     roc_auc = roc_auc_score(true_labels, predicted_probs)
 #     accuracy = correct_predictions / len(data)
+#     print(accuracy)
 #
 #     # Define weights for each metric
 #     weight_roc = 0.7
@@ -165,7 +164,7 @@ def calculate_fitness(network, data):
 #     return fitness
 
 def selection(population, fitness):
-    parent_indices = np.random.choice(range(len(population)), size=2, replace=True, p=fitness / np.sum(fitness))
+    parent_indices = np.random.choice(range(len(population)), size=2, replace=False, p=fitness / np.sum(fitness))
     parents = [population[idx] for idx in parent_indices]
     return parents[0], parents[1]
 
@@ -272,7 +271,7 @@ def evolve(population, train_data):
     global best_network
     fitness_array = [(network, calculate_fitness(network, train_data)) for network in population]
     fitness_array.sort(key=lambda x: x[1], reverse=True)
-    fitness_array = fitness_array[:-10] + [fitness_array[0]]*10
+    fitness_array = fitness_array[:-5] + [fitness_array[0]]*5
     fitness_array.sort(key=lambda x: x[1], reverse=True)
     population = [network for network, f in fitness_array]
     fitness = [f for network, f in fitness_array]
@@ -310,7 +309,7 @@ test_accuracy = calculate_fitness(best_network, test_data)
 print("Test Accuracy:", test_accuracy)
 
 # Write network structure and weights to file
-with open("wnet0.txt", "w") as file:
+with open("wnet1.txt", "w") as file:
     # Write layer sizes
     layer_sizes = [str(layer) for layer in best_network.structure]
     file.write(" ".join(layer_sizes) + "\n")

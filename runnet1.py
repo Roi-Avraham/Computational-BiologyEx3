@@ -93,7 +93,7 @@ def run_network(network_file, data_file, output_file):
 
 # Example usage
 network_file = 'wnet0.txt'  # Network structure and weights file
-data_file = 'data.txt'  # Data file
-output_file = 'classifications.txt'  # Output file
+data_file = 'testnet1.txt'  # Data file
+output_file = 'classifications1.txt'  # Output file
 
 run_network(network_file, data_file, output_file)

@@ -8,6 +8,6 @@ def remove_last_number(input_file, output_file):
         file.write('\n'.join(modified_lines))
 
 # Usage
-input_file = 'nn0.txt'
-output_file = 'data.txt'
+input_file = 'nn1.txt'
+output_file = 'testnet1.txt'
 remove_last_number(input_file, output_file)
