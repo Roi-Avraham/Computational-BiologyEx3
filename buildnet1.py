@@ -10,6 +10,7 @@ CROSSOVER_RATE = 1
 INPUT_SIZE = 16
 OUTPUT_SIZE = 1
 ELITE_SIZE = 5
+BEST = (POPULATION_SIZE * 10) // 100
 
 
 # Load data
@@ -249,7 +250,7 @@ def mutation(network, mutation_rate=0.1, distribution_index=20):
         rows, cols = mutated_matrix.shape
         for i in range(rows):
             for j in range(cols):
-                if random.random() <= mutation_rate:
+                if random.random() <= MUTATION_RATE:
                     u = random.random()
                     if u <= 0.5:
                         delta = (2 * u) ** (1.0 / (distribution_index + 1)) - 1
@@ -271,7 +272,7 @@ def evolve(population, train_data):
     global best_network
     fitness_array = [(network, calculate_fitness(network, train_data)) for network in population]
     fitness_array.sort(key=lambda x: x[1], reverse=True)
-    fitness_array = fitness_array[:-5] + [fitness_array[0]]*5
+    fitness_array = fitness_array[:-BEST] + [fitness_array[0]]*BEST
     fitness_array.sort(key=lambda x: x[1], reverse=True)
     population = [network for network, f in fitness_array]
     fitness = [f for network, f in fitness_array]
