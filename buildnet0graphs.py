@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import roc_auc_score
 
 # Constants
-POPULATION_SIZE = 30
+POPULATION_SIZE = 100
 NUM_GENERATIONS = 100
 MUTATION_RATE = 0.7
 CROSSOVER_RATE = 1
@@ -128,7 +128,7 @@ def mutation(network, mutation_rate=0.1, distribution_index=20):
         rows, cols = mutated_matrix.shape
         for i in range(rows):
             for j in range(cols):
-                if random.random() <= mutation_rate:
+                if random.random() <= MUTATION_RATE:
                     u = random.random()
                     if u <= 0.5:
                         delta = (2 * u) ** (1.0 / (distribution_index + 1)) - 1
