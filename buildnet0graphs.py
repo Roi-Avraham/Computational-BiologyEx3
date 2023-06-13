@@ -186,11 +186,14 @@ def genetic(key):
         print("generation number: ", generation + 1)
         population = evolve(population, train_data)
 
-    dict_graphs[key] = best_fittness
 
     # Evaluate the best network on the test data
     test_accuracy = calculate_fitness(best_network, test_data)
     print("Test Accuracy:", test_accuracy)
+
+    best_fittness.append(test_accuracy)
+    dict_graphs[key] = best_fittness
+
 
 
 def make_arguments(pz, ng, mr, cr):
@@ -212,9 +215,9 @@ def make_arguments(pz, ng, mr, cr):
 
 def start():
     global dict_graphs
-    population_array = [30, 50, 75, 100]
+    population_array = [30,100, 200]
     for i in range(len(population_array)):
-        make_arguments(population_array[i], 60, 0.7, 1)
+        make_arguments(population_array[i], 100, 0.75, 1)
         genetic(population_array[i])
 
     create_graphs("POPULATION_SIZE")
@@ -238,22 +241,37 @@ def start():
 def create_graphs(parm):
     global dict_graphs
     # Create a new figure and axis
-    fig, ax = plt.subplots()
+    plt.figure()  # create a new figure
 
     for key in dict_graphs:
-        generation = [i for i in range(1, len(dict_graphs[key]) + 1)]
+        generation = [i for i in range(1, len(dict_graphs[key]))]
         generation = np.array(generation)
-        ax.plot(generation, dict_graphs[key], label=f'{key} {parm}')
+        plt.plot(generation, dict_graphs[key][:-1], label=f'{key} {parm}')
 
     # Set labels and title
-    ax.set_xlabel(parm)
-    ax.set_ylabel('accuracy')
+    plt.xlabel(parm)
+    plt.ylabel('accuracy')
 
     # Add a legend
-    ax.legend()
+    plt.legend()
+
+    plt.figure()  # create a new figure
+    # Plot the data
+    for key in dict_graphs:
+        generation = [i for i in range(1, len(dict_graphs[key]))]
+        generation = np.array(generation)
+        plt.bar(key, dict_graphs[key][-1], label=f'{key} {parm}')
+
+    plt.xlabel(f'{parm}')
+    plt.ylabel('test accuracy')
+
+    # Add a legend
+    plt.legend()
+    plt.xlim(left=0)
 
     # Display the plot
     plt.show()
+
 
 start()
 
