@@ -25,7 +25,7 @@ with open('nn0.txt', 'r') as file:
 # Split data into training and test sets
 random.shuffle(data)
 train_size = int(0.8 * len(data))
-train_data = data[:train_size//8]
+train_data = data[:train_size//2]
 test_data = data[train_size:]
 
 
