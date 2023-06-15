@@ -5,8 +5,8 @@ from sklearn.metrics import roc_auc_score
 
 # Constants
 POPULATION_SIZE = 100
-NUM_GENERATIONS = 100
-MUTATION_RATE = 0.7
+NUM_GENERATIONS = 150
+MUTATION_RATE = 0.1
 CROSSOVER_RATE = 1
 INPUT_SIZE = 16
 OUTPUT_SIZE = 1
@@ -26,7 +26,7 @@ with open('nn0.txt', 'r') as file:
 # Split data into training and test sets
 random.shuffle(data)
 train_size = int(0.8 * len(data))
-train_data = data[:train_size//16]
+train_data = data[:train_size]
 test_data = data[train_size:]
 
 
@@ -69,7 +69,7 @@ class Network:
 def initialize_population(population_size, input_size, output_size):
     population = []
     for _ in range(population_size):
-        structure = [input_size, 10, 8, 6, output_size]  # Randomly initialize network structure
+        structure = [input_size, 8, 6, 4, output_size]  # Randomly initialize network structure
         population.append(Network(structure))
     return population
 
@@ -258,8 +258,6 @@ def create_graphs(parm):
     plt.figure()  # create a new figure
     # Plot the data
     for key in dict_graphs:
-        generation = [i for i in range(1, len(dict_graphs[key]))]
-        generation = np.array(generation)
         plt.bar(key, dict_graphs[key][-1], label=f'{key} {parm}')
 
     plt.xlabel(f'{parm}')

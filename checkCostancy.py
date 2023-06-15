@@ -7,7 +7,7 @@ def load_data(data_file):
     return data
 
 
-dataset = load_data('nn0.txt')
+dataset = load_data('nn1.txt')
 number_line = 0
 for line in dataset:
     number_line+=1
@@ -17,7 +17,7 @@ for line in dataset:
     zeros_count = string.count("0")
 
     # Apply the consistency rule
-    predicted_label = 1 if  13> ones_count > 7 else 0
+    predicted_label = 1 if  ones_count <= 7 else 0
 
     if str(predicted_label) == actual_label:
         correct_predictions += 1
