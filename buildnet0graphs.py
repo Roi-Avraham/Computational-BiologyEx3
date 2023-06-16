@@ -264,7 +264,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][0][:-1], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('best accuracy')
 
     # Add a legend
@@ -290,7 +290,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][1], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('average accuracy')
 
     # Add a legend
@@ -304,7 +304,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][2], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('worst accuracy')
 
     # Add a legend

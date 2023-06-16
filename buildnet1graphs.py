@@ -230,27 +230,30 @@ def make_arguments(pz, ng, mr, cr):
 
 def start():
     global dict_graphs
-    population_array = [30, 40]
+
+    population_array = [30, 50, 100, 150]
     for i in range(len(population_array)):
-        make_arguments(population_array[i], 10, 0.1, 1)
+        make_arguments(population_array[i], 100, 0.1, 1)
         genetic(population_array[i])
 
     create_graphs("POPULATION_SIZE")
     dict_graphs = {}
 
-    # num_generation_array = [30, 50, 75, 100]
+    # num_generation_array = [30, 50, 100, 150]
     # for i in range(len(num_generation_array)):
-    #     make_arguments(30, num_generation_array[i], 0.75, 1)
+    #     make_arguments(100, num_generation_array[i], 0.1, 1)
     #     genetic(num_generation_array[i])
     # create_graphs("NUM_GENERATIONS")
     # dict_graphs = {}
     #
     # mutation_array = [0.1, 0.5, 0.75, 1]
     # for i in range(len(mutation_array)):
-    #     make_arguments(30, 30, mutation_array[i], 1)
+    #     make_arguments(100, 100, mutation_array[i], 1)
     #     genetic(mutation_array[i])
     # create_graphs("MUTATION_RATE")
     # dict_graphs = {}
+
+
 
 
 def create_graphs(parm):
@@ -264,7 +267,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][0][:-1], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('best accuracy')
 
     # Add a legend
@@ -290,7 +293,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][1], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('average accuracy')
 
     # Add a legend
@@ -304,7 +307,7 @@ def create_graphs(parm):
         plt.plot(generation, dict_graphs[key][2], label=f'{key} {parm}')
 
     # Set labels and title
-    plt.xlabel(parm)
+    plt.xlabel("generation")
     plt.ylabel('worst accuracy')
 
     # Add a legend
