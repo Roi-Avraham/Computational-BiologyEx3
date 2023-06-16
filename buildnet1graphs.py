@@ -7,12 +7,12 @@ from sklearn.metrics import roc_auc_score
 
 # Constants
 POPULATION_SIZE = 100
-NUM_GENERATIONS = 150
+NUM_GENERATIONS = 100
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 1
 INPUT_SIZE = 16
 OUTPUT_SIZE = 1
-ELITE_SIZE = 10
+ELITE_SIZE = 5
 BEST = (POPULATION_SIZE * 10) // 100
 dict_graphs = {}
 best_fittness = []
@@ -22,7 +22,7 @@ worst_fittness = []
 # Load data
 # Parse the data from nn0.txt
 data = []
-with open('nn0.txt', 'r') as file:
+with open('nn1.txt', 'r') as file:
     for line in file:
         binary_string, label = line.strip().split()
         data.append((binary_string, int(label)))
@@ -30,7 +30,7 @@ with open('nn0.txt', 'r') as file:
 # Split data into training and test sets
 random.shuffle(data)
 train_size = int(0.8 * len(data))
-train_data = data[:train_size//8]
+train_data = data[:train_size//16]
 test_data = data[train_size:]
 
 
@@ -73,7 +73,7 @@ class Network:
 def initialize_population(population_size, input_size, output_size):
     population = []
     for _ in range(population_size):
-        structure = [input_size, 8, 6, 4, output_size]  # Randomly initialize network structure
+        structure = [input_size, 2, output_size]  # Randomly initialize network structure
         population.append(Network(structure))
     return population
 
@@ -230,20 +230,20 @@ def make_arguments(pz, ng, mr, cr):
 
 def start():
     global dict_graphs
-    # population_array = [30, 50, 100, 150]
-    # for i in range(len(population_array)):
-    #     make_arguments(population_array[i], 100, 0.1, 1)
-    #     genetic(population_array[i])
-    #
-    # create_graphs("POPULATION_SIZE")
-    # dict_graphs = {}
+    population_array = [30, 40]
+    for i in range(len(population_array)):
+        make_arguments(population_array[i], 10, 0.1, 1)
+        genetic(population_array[i])
 
-    num_generation_array = [30, 50, 75, 100]
-    for i in range(len(num_generation_array)):
-        make_arguments(30, num_generation_array[i], 0.75, 1)
-        genetic(num_generation_array[i])
-    create_graphs("NUM_GENERATIONS")
+    create_graphs("POPULATION_SIZE")
     dict_graphs = {}
+
+    # num_generation_array = [30, 50, 75, 100]
+    # for i in range(len(num_generation_array)):
+    #     make_arguments(30, num_generation_array[i], 0.75, 1)
+    #     genetic(num_generation_array[i])
+    # create_graphs("NUM_GENERATIONS")
+    # dict_graphs = {}
     #
     # mutation_array = [0.1, 0.5, 0.75, 1]
     # for i in range(len(mutation_array)):
