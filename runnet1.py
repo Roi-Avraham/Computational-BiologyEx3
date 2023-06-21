@@ -36,9 +36,7 @@ def load_network(network_file):
 
         for i in range(num_layers):
             rows = structure[i+1]
-            print(rows)
             cols = structure[i]
-            print(cols)
             weight_matrix = np.array([float(val) for val in lines[current_line].strip().split()])
             weight_matrix = weight_matrix.reshape((rows, cols))
             weights.append(weight_matrix)
