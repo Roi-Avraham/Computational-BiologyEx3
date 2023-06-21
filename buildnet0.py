@@ -1,6 +1,7 @@
 import random
+import sys
+
 import numpy as np
-from sklearn.metrics import roc_auc_score
 
 # Constants
 POPULATION_SIZE = 100
@@ -13,20 +14,29 @@ ELITE_SIZE = 10
 BEST = (POPULATION_SIZE * 10) // 100
 
 
+train_file = sys.argv[1]
+test_file = sys.argv[2]
+
 
 # Load data
 # Parse the data from nn0.txt
-data = []
-with open('nn0.txt', 'r') as file:
+train_data = []
+with open(train_file, 'r') as file:
     for line in file:
         binary_string, label = line.strip().split()
-        data.append((binary_string, int(label)))
+        train_data.append((binary_string, int(label)))
 
-# Split data into training and test sets
-random.shuffle(data)
-train_size = int(0.8 * len(data))
-train_data = data[:train_size]
-test_data = data[train_size:]
+test_data = []
+with open(train_file, 'r') as file:
+    for line in file:
+        binary_string, label = line.strip().split()
+        test_data.append((binary_string, int(label)))
+
+# # Split data into training and test sets
+# random.shuffle(data)
+# train_size = int(0.8 * len(data))
+# train_data = data[:train_size]
+# test_data = data[train_size:]
 
 
 # Activation functions
@@ -36,6 +46,7 @@ def sigmoid(x):
 
 def relu(x):
     return np.maximum(0, x)
+
 
 def xavier_init(shape):
     """
@@ -51,7 +62,6 @@ class Network:
     def __init__(self, structure, weights=None):
         self.structure = structure
         if weights is None:
-            # self.weights = [np.random.randn(structure[i + 1], structure[i]) for i in range(len(structure) - 1)]
             self.weights = [xavier_init((structure[i + 1], structure[i])) for i in range(len(structure) - 1)]
         else:
             self.weights = weights

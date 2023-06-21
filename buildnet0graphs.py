@@ -29,9 +29,10 @@ with open('nn0.txt', 'r') as file:
 
 # Split data into training and test sets
 random.shuffle(data)
-train_size = int(0.8 * len(data))
-train_data = data[:train_size//8]
-test_data = data[train_size:]
+small_data = data[:3000]
+train_size = int(0.8 * len(small_data))
+train_data = small_data[:train_size]
+test_data = small_data[train_size:]
 
 
 # Activation functions
@@ -238,19 +239,19 @@ def start():
     # create_graphs("POPULATION_SIZE")
     # dict_graphs = {}
 
-    num_generation_array = [30, 50, 75, 100]
-    for i in range(len(num_generation_array)):
-        make_arguments(30, num_generation_array[i], 0.75, 1)
-        genetic(num_generation_array[i])
-    create_graphs("NUM_GENERATIONS")
-    dict_graphs = {}
-    #
-    # mutation_array = [0.1, 0.5, 0.75, 1]
-    # for i in range(len(mutation_array)):
-    #     make_arguments(30, 30, mutation_array[i], 1)
-    #     genetic(mutation_array[i])
-    # create_graphs("MUTATION_RATE")
+    # num_generation_array = [30, 50, 100, 150]
+    # for i in range(len(num_generation_array)):
+    #     make_arguments(100, num_generation_array[i], 0.1, 1)
+    #     genetic(num_generation_array[i])
+    # create_graphs("NUM_GENERATIONS")
     # dict_graphs = {}
+    #
+    mutation_array = [0.1, 0.5, 0.75, 1]
+    for i in range(len(mutation_array)):
+        make_arguments(100, 100, mutation_array[i], 1)
+        genetic(mutation_array[i])
+    create_graphs("MUTATION_RATE")
+    dict_graphs = {}
 
 
 def create_graphs(parm):

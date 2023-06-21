@@ -27,8 +27,8 @@ def compare_files(file1_path, file2_path):
 
 
 # Provide the paths to the files you want to compare
-file1_path = 'nn0.txt'
-file2_path = 'classifications0.txt'
+file1_path = 'new_test1.txt'
+file2_path = 'classifications_test1.txt'
 
 # Call the compare_files function
 compare_files(file1_path, file2_path)

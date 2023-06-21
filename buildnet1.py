@@ -1,4 +1,6 @@
 import random
+import sys
+
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
@@ -12,20 +14,37 @@ OUTPUT_SIZE = 1
 ELITE_SIZE = 5
 BEST = (POPULATION_SIZE * 10) // 100
 
+train_file = sys.argv[1]
+test_file = sys.argv[2]
 
 # Load data
 # Parse the data from nn0.txt
-data = []
-with open('nn1.txt', 'r') as file:
+train_data = []
+with open(train_file, 'r') as file:
     for line in file:
         binary_string, label = line.strip().split()
-        data.append((binary_string, int(label)))
+        train_data.append((binary_string, int(label)))
 
-# Split data into training and test sets
-random.shuffle(data)
-train_size = int(0.8 * len(data))
-train_data = data[:train_size]
-test_data = data[train_size:]
+test_data = []
+with open(train_file, 'r') as file:
+    for line in file:
+        binary_string, label = line.strip().split()
+        test_data.append((binary_string, int(label)))
+
+
+# # Load data
+# # Parse the data from nn0.txt
+# data = []
+# with open('nn1.txt', 'r') as file:
+#     for line in file:
+#         binary_string, label = line.strip().split()
+#         data.append((binary_string, int(label)))
+#
+# # Split data into training and test sets
+# random.shuffle(data)
+# train_size = int(0.8 * len(data))
+# train_data = data[:train_size]
+# test_data = data[train_size:]
 
 
 # Activation functions

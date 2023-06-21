@@ -29,9 +29,8 @@ with open('nn1.txt', 'r') as file:
 
 # Split data into training and test sets
 random.shuffle(data)
-small_data = data[:3000]
 train_size = int(0.8 * len(data))
-train_data = data[:train_size]
+train_data = data[:train_size//16]
 test_data = data[train_size:]
 
 
@@ -65,8 +64,8 @@ class Network:
     def predict(self, input_data):
         hidden = input_data
         for layer_weights in self.weights[:-1]:
-            hidden = relu(np.dot(layer_weights, hidden))
-        output = relu(np.dot(self.weights[-1], hidden))
+            hidden = sigmoid(np.dot(layer_weights, hidden))
+        output = sigmoid(np.dot(self.weights[-1], hidden))
         return output
 
 

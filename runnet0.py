@@ -1,7 +1,11 @@
+import sys
+
 import numpy as np
+
 
 def relu(x):
     return np.maximum(0, x)
+
 
 # Define the Neural Network class
 class NeuralNetwork:
@@ -56,7 +60,9 @@ def save_classifications(classifications, output_file, data):
     # Write the data and classifications to the output file
     with open(output_file, 'w') as file:
         for i in range(len(data)):
-            file.write(data[i] + '   ' + str(classifications[i]) + '\n')
+            # file.write(data[i] + '   ' + str(classifications[i]) + '\n')
+            file.write(str(classifications[i]) + '\n')
+            # file.write(data[i] + ' ' + str(classifications[i]) + '\n')
 
 
 # Main program
@@ -86,9 +92,14 @@ def run_network(network_file, data_file, output_file):
     save_classifications(classifications, output_file, data)
 
 
-# Example usage
-network_file = 'wnet0.txt'  # Network structure and weights file
-data_file = 'testnet0.txt'  # Data file
-output_file = 'classifications0.txt'  # Output file
+if __name__ == '__main__':
+    # Example usage
+    # network_file = 'wnet0.txt'  # Network structure and weights file
+    # data_file = 'testnet_test.txt'  # Data file
+    # output_file = 'classifications_test.txt'  # Output file
 
-run_network(network_file, data_file, output_file)
+    network_file = sys.argv[1]  # Network structure and weights file
+    data_file = sys.argv[2]  # Data file
+    output_file = 'classifications0.txt'  # Output file
+
+    run_network(network_file, data_file, output_file)

@@ -1,10 +1,14 @@
+import sys
 import numpy as np
+
 
 def relu(x):
     return np.maximum(0, x)
 
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+
 
 # Define the Neural Network class
 class NeuralNetwork:
@@ -19,6 +23,7 @@ class NeuralNetwork:
             hidden = sigmoid(np.dot(layer_weights, hidden))
         output = sigmoid(np.dot(self.weights[-1],hidden))
         return output
+
 
 # Load the network structure and weights from file
 def load_network(network_file):
@@ -54,7 +59,9 @@ def save_classifications(classifications, output_file, data):
     # Write the data and classifications to the output file
     with open(output_file, 'w') as file:
         for i in range(len(data)):
-            file.write(data[i] + '   ' + str(classifications[i]) + '\n')
+            # file.write(data[i] + '   ' + str(classifications[i]) + '\n')
+            # file.write(data[i] + ' ' + str(classifications[i]) + '\n')
+            file.write(str(classifications[i]) + '\n')
 
 
 # Main program
@@ -84,9 +91,14 @@ def run_network(network_file, data_file, output_file):
     save_classifications(classifications, output_file, data)
 
 
-# Example usage
-network_file = 'wnet1.txt'  # Network structure and weights file
-data_file = 'testnet1.txt'  # Data file
-output_file = 'classifications1.txt'  # Output file
+if __name__ == '__main__':
+    # Example usage
+    # network_file = 'wnet0.txt'  # Network structure and weights file
+    # data_file = 'testnet_test.txt'  # Data file
+    # output_file = 'classifications_test.txt'  # Output file
 
-run_network(network_file, data_file, output_file)
+    network_file = sys.argv[1]  # Network structure and weights file
+    data_file = sys.argv[2]  # Data file
+    output_file = 'classifications1.txt'  # Output file
+
+    run_network(network_file, data_file, output_file)
