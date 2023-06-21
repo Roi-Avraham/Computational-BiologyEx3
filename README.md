@@ -1,10 +1,10 @@
 # Computational-BiologyEx3
 
-This exercise has been writen by Roi Avraham and Dina Englerd.
+This exercise has been writen by Roi Avraham and Dina Englard.
 # Description
 For this assignment we build neural networks with the help of a genetic algorithm that will 
 learn the patterns and be able to predict whether a certain string matches the pattern. 
-We decided and determine the structure of the network in terms of the number of layers and the number of 
+We determined the structure of the network: the number of layers and the number of 
 connections for each problem(nn0 and nn1).
 <br>There are 4 exe files:
 1) buildnet0.exe
