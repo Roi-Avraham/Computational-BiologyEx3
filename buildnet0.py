@@ -27,7 +27,7 @@ with open(train_file, 'r') as file:
         train_data.append((binary_string, int(label)))
 
 test_data = []
-with open(train_file, 'r') as file:
+with open(test_file, 'r') as file:
     for line in file:
         binary_string, label = line.strip().split()
         test_data.append((binary_string, int(label)))
