@@ -32,12 +32,6 @@ with open(test_file, 'r') as file:
         binary_string, label = line.strip().split()
         test_data.append((binary_string, int(label)))
 
-# # Split data into training and test sets
-# random.shuffle(data)
-# train_size = int(0.8 * len(data))
-# train_data = data[:train_size]
-# test_data = data[train_size:]
-
 
 # Activation functions
 def sigmoid(x):
@@ -98,83 +92,6 @@ def calculate_fitness(network, data):
     return fitness
 
 
-# def calculate_fitness(network, data):
-#     predicted_probs = []
-#     true_labels = []
-#     i=0
-#     for example in data:
-#         input_data = np.array(list(map(int, example[0])))
-#         target = int(example[1])
-#         output = network.predict(input_data)
-#         p = 1 if output > 0.5 else 0
-#         if target == p:
-#             i += 1
-#         predicted_probs.append(output)
-#         true_labels.append(target)
-#     print(i/len(data))
-#     fitness = roc_auc_score(true_labels, predicted_probs)
-#     return fitness
-
-
-# def calculate_fitness(network, data, roc_weight=0.7, fp_penalty=0.1):
-#     predicted_probs = []
-#     true_labels = []
-#     correct_predictions = 0
-#     false_positives = 0
-#
-#     for example in data:
-#         input_data = np.array(list(map(int, example[0])))
-#         target = int(example[1])
-#         output = network.predict(input_data)
-#         predicted_probs.append(output)
-#         true_labels.append(target)
-#
-#         predicted_class = 1 if output > 0.5 else 0
-#         if predicted_class == target:
-#             correct_predictions += 1
-#         elif predicted_class == 1 and target == 0:
-#             false_positives += 1
-#
-#     roc_auc = roc_auc_score(true_labels, predicted_probs)
-#     accuracy = correct_predictions / len(data)
-#
-#     fitness = roc_weight * roc_auc + (1 - roc_weight) * accuracy - fp_penalty * false_positives
-#     fitness = max(fitness, 0)  # Ensure fitness is non-negative
-#     return fitness
-
-# def calculate_fitness(network, data):
-#     predicted_probs = []
-#     true_labels = []
-#     correct_predictions = 0
-#     false_positives = 0
-#     print("i")
-#
-#     for example in data:
-#         input_data = np.array(list(map(int, example[0])))
-#         target = int(example[1])
-#         output = network.predict(input_data)
-#         predicted_probs.append(output)
-#         true_labels.append(target)
-#
-#         predicted_class = 1 if output > 0.5 else 0
-#         if predicted_class == target:
-#             correct_predictions += 1
-#         elif predicted_class == 1 and target == 0:
-#             false_positives += 1
-#
-#     roc_auc = roc_auc_score(true_labels, predicted_probs)
-#     accuracy = correct_predictions / len(data)
-#
-#     # Define weights for each metric
-#     weight_roc = 0.7
-#     weight_accuracy = 0.3
-#     fp_penalty = 0.1
-#
-#     fitness = weight_roc * roc_auc + weight_accuracy * accuracy - fp_penalty * false_positives
-#     fitness = max(fitness, 0)  # Ensure fitness is non-negative
-#
-#     return fitness
-
 def selection(population, fitness):
     parent_indices = np.random.choice(range(len(population)), size=2, replace=True, p=fitness / np.sum(fitness))
     parents = [population[idx] for idx in parent_indices]
@@ -205,54 +122,6 @@ def crossover(parent1, parent2):
     child_two = Network(parent1.structure, offspring_weights_two)
 
     return child_one, child_two
-
-# def crossover(parent1, parent2, eta=1):
-#     offspring_weights_one = []
-#     offspring_weights_two = []
-#     for i in range(len(parent1.weights)):
-#         rows, cols = parent1.weights[i].shape
-#         offspring_one = np.zeros((rows, cols))
-#         offspring_two = np.zeros((rows, cols))
-#
-#         for j in range(rows):
-#             for k in range(cols):
-#                 if random.random() <= 0.5:
-#                     beta = (2 * random.random()) ** (1.0 / (eta + 1))
-#                 else:
-#                     beta = (0.5 / (1 - random.random())) ** (1.0 / (eta + 1))
-#
-#                 offspring_one[j, k] = 0.5 * ((1 + beta) * parent1.weights[i][j, k] + (1 - beta) * parent2.weights[i][j, k])
-#                 offspring_two[j, k] = 0.5 * ((1 - beta) * parent1.weights[i][j, k] + (1 + beta) * parent2.weights[i][j, k])
-#
-#         offspring_weights_one.append(offspring_one)
-#         offspring_weights_two.append(offspring_two)
-#
-#     child_one = Network(parent1.structure, offspring_weights_one)
-#     child_two = Network(parent1.structure, offspring_weights_two)
-#
-#     return child_one, child_two
-
-
-# def mutation(network):
-#     mutated_weights = []
-#     for weight_matrix in network.weights:
-#         mutated_matrix = weight_matrix.copy()
-#         mask = np.random.rand(*mutated_matrix.shape) < MUTATION_RATE
-#         random_values = np.random.randn(*mutated_matrix.shape)
-#         mutated_matrix[mask] += random_values[mask]
-#
-#         # Clip the mutated values to the range of -1 to 1
-#         mutated_matrix = np.clip(mutated_matrix, -1, 1)
-#
-#         mutated_weights.append(mutated_matrix)
-#
-#     mutated_network = Network(network.structure, mutated_weights)
-#     # if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
-#     #     return network
-#     return mutated_network
-#
-#
-# best_network = None
 
 def mutation(network, mutation_rate=0.1, distribution_index=20):
     mutated_weights = []

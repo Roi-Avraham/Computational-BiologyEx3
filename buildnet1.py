@@ -30,21 +30,6 @@ with open(test_file, 'r') as file:
         test_data.append((binary_string, int(label)))
 
 
-# # Load data
-# # Parse the data from nn0.txt
-# data = []
-# with open('nn1.txt', 'r') as file:
-#     for line in file:
-#         binary_string, label = line.strip().split()
-#         data.append((binary_string, int(label)))
-#
-# # Split data into training and test sets
-# random.shuffle(data)
-# train_size = int(0.8 * len(data))
-# train_data = data[:train_size]
-# test_data = data[train_size:]
-
-
 # Activation functions
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -134,28 +119,6 @@ def crossover(parent1, parent2):
     child_two = Network(parent1.structure, offspring_weights_two)
 
     return child_one, child_two
-
-
-# def mutation(network):
-#     mutated_weights = []
-#     for weight_matrix in network.weights:
-#         mutated_matrix = weight_matrix.copy()
-#         mask = np.random.rand(*mutated_matrix.shape) < MUTATION_RATE
-#         random_values = np.random.randn(*mutated_matrix.shape)
-#         mutated_matrix[mask] += random_values[mask]
-#
-#         # Clip the mutated values to the range of -1 to 1
-#         mutated_matrix = np.clip(mutated_matrix, -1, 1)
-#
-#         mutated_weights.append(mutated_matrix)
-#
-#     mutated_network = Network(network.structure, mutated_weights)
-#     # if calculate_fitness(network, train_data) > calculate_fitness(mutated_network,train_data):
-#     #     return network
-#     return mutated_network
-#
-#
-# best_network = None
 
 def mutation(network, mutation_rate=0.1, distribution_index=20):
     mutated_weights = []
